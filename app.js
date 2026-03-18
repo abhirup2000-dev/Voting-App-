@@ -7,5 +7,5 @@ app.use(express.json())
 
 const port = 3004
 app.listen(port, ()=>{
-  console.log(`Server running on http://localhost:${port}`)
+  console.log(`Server running on Host http://localhost:${port}`)
 })
