@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const VoterScema = new Schema(
+const VoterSchema = new Schema(
   {
     name: {
       type: String,
@@ -24,7 +24,7 @@ const VoterScema = new Schema(
 );
 
 
-const VoterModel = mongoose.model('voter', VoterScema)
+const VoterModel = mongoose.model('voter', VoterSchema)
 
 
 module.exports = VoterModel
