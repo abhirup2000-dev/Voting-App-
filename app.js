@@ -1,10 +1,11 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 const DatabaseConnect = require('./app/config/dcon')
 DatabaseConnect()
 
-app.use(express.json())
 
 
 
