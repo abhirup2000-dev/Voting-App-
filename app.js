@@ -1,6 +1,9 @@
 const express = require('express')
 const app = express()
 
+const DatabaseConnect = require('./app/config/dcon')
+DatabaseConnect()
+
 app.use(express.json())
 
 
