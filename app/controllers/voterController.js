@@ -1,6 +1,8 @@
 
 const Voter = require("../models/voter");
 
+const Candidate = require("../models/candidate");
+
 const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
@@ -159,9 +161,7 @@ class VoterController {
 
   // update password
   async updateVoterPassword(req, res) {
-
     try {
-
       const userId = req.user.id; // ✅ from token
 
       const { oldPassword, newPassword } = req.body;
@@ -207,10 +207,73 @@ class VoterController {
 
       await user.save();
 
-      return res.status(200).json({
+      return res.status(StatusCode.SUCCESS).json({
         success: true,
         message: "Password updated successfully",
       });
+    } catch (error) {
+      return res.status(StatusCode.SERVER_ERROR).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  //vote submission
+  async submitVote(req, res) {
+    try {
+      const voterId = req.user?.id;
+
+      if (!voterId) {
+        return res.status(StatusCode.BAD_REQUEST).json({
+          success: false,
+          message: "Unauthorized",
+        });
+      }
+
+      const { candidateId } = req.body;
+
+      if (!candidateId) {
+        return res.status(StatusCode.BAD_GATEWAY).json({
+          success: false,
+          message: "Candidate ID is required",
+        });
+      }
+
+      //Check candidate exists
+      const candidate = await Candidate.findById(candidateId);
+
+      if (!candidate) {
+        return res.status(StatusCode.NOT_FOUND).json({
+          success: false,
+          message: "Candidate not found",
+        });
+      }
+
+      // Atomic update to prevent double voting
+      const voter = await Voter.findOneAndUpdate(
+        { _id: voterId, isVoted: false },
+        { isVoted: true },
+        { new: true },
+      );
+
+      if (!voter) {
+        return res.status(StatusCode.FORBIDDEN).json({
+          success: false,
+          message: "You have already voted",
+        });
+      }
+
+      // Increment vote safely
+      await Candidate.findByIdAndUpdate(candidateId, {
+        $inc: { voteCount: 1 },
+      });
+
+      return res.status(StatusCode.SUCCESS).json({
+        success: true,
+        message: "Vote casted successfully",
+      });
+
     } catch (error) {
       return res.status(StatusCode.SERVER_ERROR).json({
         success: false,

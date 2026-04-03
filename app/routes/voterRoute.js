@@ -17,5 +17,6 @@ router.get("/voter-dashboard", VoterController.voterDashboard);
 
 router.put("/update-password", VoterController.updateVoterPassword);
 
+router.post("/submit-vote", VoterController.submitVote);
 
 module.exports = router;
