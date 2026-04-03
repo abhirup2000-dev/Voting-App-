@@ -39,19 +39,25 @@ app.use(
 // Apply the rate limiting middleware to all requests.
 app.use(rateLimit);
 
+// database connection
+const DatabaseConnect = require("./app/config/dbcon");
+DatabaseConnect();
+
 //define json
 app.use(express.json());
 
 // Parse form data
 app.use(express.urlencoded({ extended: true }));
 
+// ejs template engine
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
 //static files
 app.use(express.static(path.join(__dirname, "public")));
+app.use("uploads", express.static(path.join(__dirname, "/uploads")));
+app.use("/uploads", express.static("uploads"));
 
-// database connection
-const DatabaseConnect = require("./app/config/dbcon");
-
-DatabaseConnect();
 
 app.use(cookieParser());
 
@@ -66,9 +72,12 @@ app.use(
   }),
 );
 
+//api routes
+app.use(require("./app/routes/index"));
+
 const port = 3004;
 
 app.listen(port, () => {
 
-  console.log(`Server is successfully running on Host http://localhost:${port}`);
+  console.log("💻 SERVER SUCCESSFULLY CONNECTED TO", `http://localhost:${port}`);
 });

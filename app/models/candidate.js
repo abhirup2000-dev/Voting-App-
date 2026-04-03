@@ -3,51 +3,51 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const VoterSchema = new Schema(
+const CandidateSchema = new Schema(
   {
     name: {
       type: String,
-      trim: true,
       required: true,
     },
 
     phone: {
       type: String,
       required: true,
-      unique: true,
     },
 
-    epicNumber: {
+    party: {
       type: String,
-      required: true,
-      unique: true,
-    },
-
-    constituency: {
-      type: String,
-      trim: true,
       required: true,
     },
 
     password: {
       type: String,
-      minlength: 6,
       required: true,
     },
 
-    isVoted: {
-      type: Boolean,
-      default: false,
+    voterId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "voter",
+      required: true,
+    },
+
+    votedAt: {
+      type: Date,
+      default: Date.now(),
+    },
+
+    voteCount: {
+      type: Number,
+      default: 0,
     },
   },
   {
-    timestamps: true,
     versionKey: false,
   },
 );
 
 
-const VoterModel = mongoose.model('voter', VoterSchema)
+const CandidateModel = mongoose.model("candidate", CandidateSchema);
 
 
-module.exports = VoterModel
+module.exports = CandidateModel;

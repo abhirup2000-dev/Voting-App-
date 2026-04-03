@@ -15,7 +15,7 @@ const DatabaseConnect = async () => {
 
     if (connect) {
 
-      console.log("Database connected");
+      console.log("🚀 MongoDB CONNECTED SUCCESSFULLY!!");
 
     } else {
 
@@ -28,4 +28,4 @@ const DatabaseConnect = async () => {
   }
 };
 
-module.exports = DatabaseConnect
+module.exports = DatabaseConnect;
