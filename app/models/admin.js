@@ -8,10 +8,15 @@ const AdminSchema = new Schema(
       type: String,
       required: true,
     },
-    
+
     email: {
       type: String,
       required: true,
+    },
+
+    phoneNumber: { 
+      type: String, 
+      required: true 
     },
 
     password: {
@@ -19,10 +24,16 @@ const AdminSchema = new Schema(
       required: true,
     },
 
-    role:{
+    role: {
       type: String,
-      default: 'admin'
-    }
+      enum: ["admin", "voter"],
+      default: "admin",
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
@@ -30,8 +41,6 @@ const AdminSchema = new Schema(
   },
 );
 
+const AdminModel = mongoose.model("admin", AdminSchema);
 
-const AdminModel = mongoose.model('admin', AdminSchema)
-
-
-module.exports = AdminModel
+module.exports = AdminModel;
