@@ -110,7 +110,7 @@ class AdminController {
   // view dashboard
   async adminDashboard(req, res) {
     try {
-      const paramId = req.user?.id || req.session?.user?.id;
+      const paramId = req.admin?.id || req.session?.admin?.id;
 
       if (!paramId) {
         return res.status(StatusCode.BAD_REQUEST).json({
@@ -144,7 +144,7 @@ class AdminController {
   // update password
   async updateAdminPassword(req, res) {
     try {
-      const userId = req.user.id; // ✅ from token
+      const userId = req.admin.id; 
 
       const { oldPassword, newPassword } = req.body;
 

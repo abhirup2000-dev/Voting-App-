@@ -26,7 +26,7 @@ const AdminSchema = new Schema(
 
     role: {
       type: String,
-      enum: ["admin", "voter"],
+      enum: ["admin", "voter", "candidate"],
       default: "admin",
     },
 
