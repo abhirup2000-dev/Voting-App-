@@ -1,0 +1,677 @@
+{
+  "info": {
+    "_postman_id": "ff617568-abef-413b-9455-e38692e94f49",
+    "name": "Voting app",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51322178",
+    "_collection_link": "https://go.postman.co/collection/51322178-ff617568-abef-413b-9455-e38692e94f49?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "http://localhost:3004/api/admin/create-admin",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Admin Rajesh Gupta\",\r\n  \"email\": \"rajesh@yopmail.com\",\r\n  \"phoneNumber\": \"9876543210\",\r\n  \"password\": \"123456789\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/admin/create-admin",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "create-admin"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/login",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"rajesh@yopmail.com\",\r\n  \"password\": \"123456789\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/admin/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/admin-dashboard",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3004/api/admin/admin-dashboard",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "admin-dashboard"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/profile",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDg5ZmIyYTZkNWRmNWZhM2MxMjIzMyIsIm5hbWUiOiJBZG1pbiBSYWplc2ggR3VwdGEiLCJlbWFpbCI6InJhamVzaEB5b3BtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NTgwNDQ1NCwiZXhwIjoxNzc1ODA4MDU0fQ.qU1HuhNexifpjwcsU5MFwuWTkyz60Pc8ufhSizFw4Sc",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3004/api/admin/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/update-profile",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Admin Rajesh Gupta\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/admin/update-profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "update-profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/update-password",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"oldPassword\": \"123456\",\r\n  \"newPassword\": \"123456789\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/admin/update-password",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "update-password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/create-candidate",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Rashmika Roy\",\r\n  \"party\": \"BJP Party\",\r\n  \"phone\": \"2200550044\",\r\n  \"password\": \"123456789\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/admin/create-candidate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "create-candidate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/candidates",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/admin/candidates",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "candidates"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/voters",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3004/api/admin/voters",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "voters"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": " http://localhost:3004/api/candidate/result",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3004/api/candidate/result",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "candidate",
+            "result"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/candidate/dashboard",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3004/api/candidate/dashboard",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "candidate",
+            "dashboard"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/candidate/login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"phone\": \"7788553366\",\r\n  \"password\": \"123456789\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/candidate/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "candidate",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/voter/logout",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/voter/logout",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "voter",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/voter/submit-vote",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"candidateId\": \"69d8a9d8b4733ace613af8b0\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/voter/submit-vote",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "voter",
+            "submit-vote"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/voter/update-password",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"oldPassword\" : \"123456\", \r\n    \"newPassword\" : \"123456789\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/voter/update-password",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "voter",
+            "update-password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/voter/voter-dashboard",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3004/api/voter/voter-dashboard",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "voter",
+            "voter-dashboard"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/voter/login-voter",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"epicNumber\": \"EPIC888\",\r\n  \"password\": \"123456789\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/voter/login-voter",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "voter",
+            "login-voter"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/voter/create-voter",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Shristi\",\r\n  \"phone\": \"3344551122\",\r\n  \"epicNumber\": \"EPIC111\",\r\n  \"constituency\": \"Haldia\",\r\n  \"password\": \"123456789\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/voter/create-voter",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "voter",
+            "create-voter"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/logout",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/admin/logout",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/result/declare-result",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/result/declare-result",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "result",
+            "declare-result"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/profile",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3004/api/admin/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/admin-dashboard",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"rajesh@yopmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/admin/admin-dashboard",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "admin-dashboard"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3004/api/admin/login",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"rajesh@yopmail.com\",\r\n  \"password\": \"123456789\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3004/api/admin/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3004",
+          "path": [
+            "api",
+            "admin",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
