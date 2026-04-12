@@ -22,6 +22,7 @@ const voterAuthCheck = async (req, res, next) => {
         req.voter = decoded;
 
         return next();
+        
       } catch (error) {
         // expired → go to refresh
       }
