@@ -11,8 +11,10 @@ const voterAuthCheck = require("../middleware/voterAuthCheck");
 
 // Flash helper via session
 function flash(req, type, msg) {
-  req.session.flash = { type, msg };
+  if (!req.session.flash) req.session.flash = [];
+  req.session.flash.push({ type, msg });
 }
+
 function getFlash(req) {
   const f = req.session.flash || null;
   delete req.session.flash;
