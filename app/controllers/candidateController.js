@@ -1,5 +1,4 @@
 const Candidate = require("../models/candidate");
-const Result = require("../models/resultModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { candidateLoginSchema } = require("../utils/candidateJoiValidation");

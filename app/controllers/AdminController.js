@@ -1,6 +1,5 @@
 const Admin = require("../models/admin");
 const Candidate = require("../models/candidate");
-const Result = require("../models/resultModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { setFlash } = require("../utils/flash");
@@ -246,7 +245,7 @@ class AdminController {
       res.redirect("/admin/login");
 
     } catch (error) {
-      
+
       console.error("Logout Error:", error);
 
       res.redirect("/admin/login");

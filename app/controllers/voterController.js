@@ -1,5 +1,4 @@
 const Voter = require("../models/voter");
-const Candidate = require("../models/candidate");
 const Vote = require("../models/voteModel");
 const Result = require("../models/resultModel");
 const bcrypt = require("bcrypt");
