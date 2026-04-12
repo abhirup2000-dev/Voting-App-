@@ -1,0 +1,54 @@
+<%- include('./partials/header', { title: 'Election Results' }) %>
+
+<nav class="nav-top">
+  <a href="/" class="brand text-decoration-none fs-5">🗳 VoteHub</a>
+</nav>
+
+<div class="container py-4" style="max-width:680px">
+  <h4 class="fw-bold mb-4 text-center">Election Results</h4>
+
+  <% if (!result) { %>
+    <div class="card p-5 text-center">
+      <div class="fs-1 mb-3">⏳</div>
+      <h5 class="fw-bold">Results Not Yet Declared</h5>
+      <p class="text-muted">The admin has not declared the result yet. Check back later.</p>
+      <a href="/" class="btn btn-primary btn-sm mt-2">Go Home</a>
+    </div>
+
+  <% } else { %>
+    <!-- Winner -->
+    <div class="card mb-4 p-4 text-center" style="background:#4f46e5;color:#fff;border-radius:12px">
+      <div class="fs-2 mb-1">🏆</div>
+      <h4 class="fw-bold mb-1">Winner: <%= result.results[0].name %></h4>
+      <p class="mb-0 opacity-90"><%= result.results[0].party %> — <%= result.results[0].voteCount %> votes</p>
+    </div>
+
+    <!-- Full table -->
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="px-4 pt-3 pb-2 border-bottom">
+          <h5 class="fw-bold mb-0">All Candidates</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr><th>Rank</th><th>Candidate</th><th>Party</th><th>Votes</th></tr>
+            </thead>
+            <tbody>
+              <% result.results.forEach(function(r, i) { %>
+                <tr class="<%= i === 0 ? 'table-warning fw-semibold' : '' %>">
+                  <td class="fw-bold">#<%= i+1 %></td>
+                  <td><%= r.name %> <%= i === 0 ? '🏆' : '' %></td>
+                  <td><span class="badge bg-secondary bg-opacity-10 text-secondary"><%= r.party %></span></td>
+                  <td><strong><%= r.voteCount %></strong></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<%- include('./partials/footer') %>

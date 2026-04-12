@@ -1,0 +1,57 @@
+<%- include('./partials/header', { title: 'Home' }) %>
+
+<nav class="nav-top">
+  <span class="brand fs-5">🗳 VoteHub</span>
+  <div class="d-flex gap-2">
+    <a href="/voter/login" class="btn btn-outline-primary btn-sm">Voter Login</a>
+    <a href="/admin/login" class="btn btn-primary btn-sm">Admin</a>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold mb-2">Secure Online Voting</h1>
+    <p class="text-muted fs-5">A transparent platform for digital elections.</p>
+  </div>
+
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-4">
+      <div class="card p-4 text-center h-100">
+        <div class="fs-1 mb-3">🗳️</div>
+        <h5 class="fw-bold">Voter</h5>
+        <p class="text-muted small">Register and cast your vote securely.</p>
+        <div class="mt-auto d-grid gap-2">
+          <a href="/voter/register" class="btn btn-primary btn-sm">Register</a>
+          <a href="/voter/login" class="btn btn-outline-primary btn-sm">Login</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-4 text-center h-100">
+        <div class="fs-1 mb-3">👤</div>
+        <h5 class="fw-bold">Candidate</h5>
+        <p class="text-muted small">View your election dashboard and results.</p>
+        <div class="mt-auto d-grid">
+          <a href="/candidate/login" class="btn btn-outline-primary btn-sm">Login</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-4 text-center h-100">
+        <div class="fs-1 mb-3">⚙️</div>
+        <h5 class="fw-bold">Admin</h5>
+        <p class="text-muted small">Manage candidates, voters and declare results.</p>
+        <div class="mt-auto d-grid gap-2">
+          <a href="/admin/signup" class="btn btn-primary btn-sm">Create Account</a>
+          <a href="/admin/login" class="btn btn-outline-primary btn-sm">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-5">
+    <a href="/result" class="btn btn-outline-secondary">View Election Results</a>
+  </div>
+</div>
+
+<%- include('./partials/footer') %>

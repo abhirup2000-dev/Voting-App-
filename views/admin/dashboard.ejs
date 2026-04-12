@@ -1,0 +1,145 @@
+<%- include('../partials/header', { title: 'Admin Dashboard' }) %>
+
+<nav class="nav-top">
+  <a href="/" class="brand text-decoration-none fs-5">🗳 VoteHub</a>
+  <div class="d-flex align-items-center gap-3">
+    <span class="text-muted small d-none d-md-inline">⚙️ <%= admin.name %></span>
+    <a href="/admin/profile" class="btn btn-outline-secondary btn-sm">Profile</a>
+    <form method="POST" action="/admin/logout" class="m-0">
+      <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+    </form>
+  </div>
+</nav>
+
+<div class="container py-4" style="max-width:960px">
+  <h4 class="fw-bold mb-4">Admin Dashboard</h4>
+
+  <%- include('../partials/flash') %>
+
+  <!-- Stats row -->
+  <div class="row g-3 mb-4">
+    <div class="col-sm-6 col-md-3">
+      <div class="card p-3 border-start border-primary border-4">
+        <p class="text-muted small mb-1 text-uppercase fw-semibold">Candidates</p>
+        <h3 class="fw-bold mb-0"><%= candidates.length %></h3>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+      <div class="card p-3 border-start border-success border-4">
+        <p class="text-muted small mb-1 text-uppercase fw-semibold">Votes Cast</p>
+        <h3 class="fw-bold mb-0"><%= voters.length %></h3>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+      <div class="card p-3 border-start border-warning border-4">
+        <p class="text-muted small mb-1 text-uppercase fw-semibold">Result</p>
+        <h5 class="fw-bold mb-0"><%= result ? '✅ Declared' : '⏳ Pending' %></h5>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Candidate -->
+  <div class="card mb-4">
+    <div class="card-body p-4">
+      <h5 class="fw-bold mb-3">Add Candidate</h5>
+      <form method="POST" action="/admin/add-candidate">
+        <div class="row g-3">
+          <div class="col-sm-6 col-md-3">
+            <input type="text" name="name" class="form-control form-control-sm" placeholder="Candidate Name" required/>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <input type="text" name="party" class="form-control form-control-sm" placeholder="Party Name" required/>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <input type="text" name="phone" class="form-control form-control-sm" placeholder="Phone Number" required/>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <input type="password" name="password" class="form-control form-control-sm" placeholder="Set Password" required/>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-sm">Add Candidate</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Candidates List -->
+  <div class="card mb-4">
+    <div class="card-body p-0">
+      <div class="px-4 pt-3 pb-2 border-bottom">
+        <h5 class="fw-bold mb-0">Candidates</h5>
+      </div>
+      <% if (candidates.length === 0) { %>
+        <p class="text-muted text-center py-4">No candidates added yet.</p>
+      <% } else { %>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>#</th><th>Name</th><th>Party</th><th>Phone</th></tr></thead>
+            <tbody>
+              <% candidates.forEach(function(c, i) { %>
+                <tr>
+                  <td class="text-muted"><%= i+1 %></td>
+                  <td class="fw-semibold"><%= c.name %></td>
+                  <td><span class="badge bg-primary bg-opacity-10 text-primary"><%= c.party %></span></td>
+                  <td class="text-muted"><%= c.phone %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Voters who voted -->
+  <div class="card mb-4">
+    <div class="card-body p-0">
+      <div class="px-4 pt-3 pb-2 border-bottom">
+        <h5 class="fw-bold mb-0">Voters Who Voted (<%= voters.length %>)</h5>
+      </div>
+      <% if (voters.length === 0) { %>
+        <p class="text-muted text-center py-4">No votes cast yet.</p>
+      <% } else { %>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>#</th><th>Name</th><th>EPIC Number</th><th>Constituency</th></tr></thead>
+            <tbody>
+              <% voters.forEach(function(v, i) { %>
+                <tr>
+                  <td class="text-muted"><%= i+1 %></td>
+                  <td class="fw-semibold"><%= v.name %></td>
+                  <td><code><%= v.epicNumber %></code></td>
+                  <td class="text-muted"><%= v.constituency %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Declare Result -->
+  <div class="card">
+    <div class="card-body p-4">
+      <h5 class="fw-bold mb-2">Declare Election Result</h5>
+      <% if (result) { %>
+        <div class="alert alert-success mb-3">
+          ✅ Result already declared. Winner: <strong><%= result.results[0].name %></strong>
+          (<%= result.results[0].party %>) — <strong><%= result.results[0].voteCount %></strong> votes.
+          <a href="/result" class="ms-2">View full results →</a>
+        </div>
+      <% } else { %>
+        <p class="text-muted small mb-3">This will tally all votes and close voting permanently.</p>
+        <form method="POST" action="/admin/declare-result"
+              onsubmit="return confirm('Declare the result now? Voting will be permanently closed.')">
+          <button type="submit" class="btn btn-warning fw-semibold">Declare Result</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+
+</div>
+
+<%- include('../partials/footer') %>

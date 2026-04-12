@@ -1,0 +1,60 @@
+<%- include('../partials/header', { title: 'Admin Profile' }) %>
+
+<nav class="nav-top">
+  <a href="/" class="brand text-decoration-none fs-5">🗳 VoteHub</a>
+  <div class="d-flex gap-2">
+    <a href="/admin/dashboard" class="btn btn-outline-secondary btn-sm">Dashboard</a>
+    <form method="POST" action="/admin/logout" class="m-0">
+      <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+    </form>
+  </div>
+</nav>
+
+<div class="container py-4" style="max-width:560px">
+  <h4 class="fw-bold mb-4">Admin Profile</h4>
+
+  <%- include('../partials/flash') %>
+
+  <!-- Profile Details -->
+  <div class="card mb-4">
+    <div class="card-body p-4">
+      <h5 class="fw-bold mb-3">Profile Information</h5>
+      <form method="POST" action="/admin/update-profile">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Name</label>
+          <input type="text" name="name" class="form-control" value="<%= admin.name %>" required/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Email</label>
+          <input type="email" class="form-control" value="<%= admin.email %>" disabled/>
+          <div class="form-text">Email cannot be changed.</div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Phone Number</label>
+          <input type="text" name="phoneNumber" class="form-control" value="<%= admin.phoneNumber %>"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Change Password -->
+  <div class="card">
+    <div class="card-body p-4">
+      <h5 class="fw-bold mb-3">Change Password</h5>
+      <form method="POST" action="/admin/update-password">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Current Password</label>
+          <input type="password" name="oldPassword" class="form-control" required/>
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold">New Password</label>
+          <input type="password" name="newPassword" class="form-control" placeholder="Min. 6 characters" required/>
+        </div>
+        <button type="submit" class="btn btn-outline-secondary">Update Password</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

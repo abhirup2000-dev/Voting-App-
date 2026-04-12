@@ -1,8 +1,6 @@
 const Joi = require("joi");
 
-// ===========================
 // Candidate Login Validation
-// ===========================
 const candidateLoginSchema = Joi.object({
   phone: Joi.string()
     .trim()

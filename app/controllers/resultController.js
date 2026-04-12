@@ -5,9 +5,7 @@ const StatusCode = require("../utils/StatusCode");
 
 class ResultController {
 
-  // ===========================
   // ADMIN DECLARE RESULT
-  // ===========================
   async declareResult(req, res) {
     try {
 
