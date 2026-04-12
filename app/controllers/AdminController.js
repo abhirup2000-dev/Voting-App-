@@ -14,7 +14,8 @@ const {
 } = require("../utils/adminJoiValidation");
 class AdminController {
   async adminSignup(req, res) {
-    const { error, value } = await adminSignupSchema.validate(req.body);
+    const { error, value } = adminSignupSchema.validate(req.body);
+
     if (error) {
       console.log(error);
       return res.redirect("/admin/signup");
@@ -47,15 +48,18 @@ class AdminController {
       });
 
       setFlash(req, "success", "Signup successful.");
+
       res.redirect("/admin/login");
-    } catch (err) {
-      setFlash(req, "error", err.message);
+    } catch (error) {
+      setFlash(req, "error", error.message);
+
       res.redirect("/admin/signup");
     }
   }
 
   async adminLogin(req, res) {
-    const { error, value } = await adminLoginSchema.validate(req.body);
+    const { error, value } = adminLoginSchema.validate(req.body);
+
     if (error) {
       console.log(error);
       return res.redirect("/admin/login");
@@ -75,20 +79,49 @@ class AdminController {
         return res.redirect("/admin/login");
       }
 
-      const token = jwt.sign(
+      // const token = jwt.sign(
+      //   { id: admin._id, role: "admin" },
+      //   process.env.JWT_SECRET_KEY,
+      //   { expiresIn: "1d" },
+      // );
+
+      // res.cookie("adminToken", token, {
+      //   httpOnly: true,
+      //   sameSite: "lax",
+      // });
+
+      const accessToken = jwt.sign(
         { id: admin._id, role: "admin" },
         process.env.JWT_SECRET_KEY,
-        { expiresIn: "1d" },
+        { expiresIn: "15m" },
       );
 
-      res.cookie("adminToken", token, {
+      const refreshToken = jwt.sign(
+        { id: admin._id },
+        process.env.JWT_REFRESH_SECRET,
+        { expiresIn: "7d" },
+      );
+
+      admin.refreshToken = refreshToken;
+
+      await admin.save();
+
+      res.cookie("adminAccessToken", accessToken, {
         httpOnly: true,
         sameSite: "lax",
+        maxAge: 15 * 60 * 1000,
+      });
+
+      res.cookie("adminRefreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       res.redirect("/admin/dashboard");
-    } catch (err) {
-      setFlash(req, "error", err.message);
+    } catch (error) {
+      setFlash(req, "error", error.message);
+
       res.redirect("/admin/login");
     }
   }
@@ -122,7 +155,7 @@ class AdminController {
   }
 
   async updateProfile(req, res) {
-    const { error, value } = await updateProfileSchema.validate(req.body);
+    const { error, value } = updateProfileSchema.validate(req.body);
     if (error) {
       console.log(error);
       return res.redirect("/admin/profile");
@@ -139,6 +172,7 @@ class AdminController {
       }
 
       admin.name = name || admin.name;
+
       admin.phoneNumber = phoneNumber || admin.phoneNumber;
 
       await admin.save();
@@ -153,7 +187,7 @@ class AdminController {
   }
 
   async updateAdminPassword(req, res) {
-    const { error, value } = await updatePasswordSchema.validate(req.body);
+    const { error, value } = updatePasswordSchema.validate(req.body);
     if (error) {
       console.log(error);
       return res.redirect("/admin/profile");
@@ -184,9 +218,39 @@ class AdminController {
     }
   }
 
-  adminLogout(req, res) {
-    res.clearCookie("adminToken");
-    res.redirect("/admin/login");
+  // adminLogout(req, res) {
+  //   res.clearCookie("adminToken");
+  //   res.redirect("/admin/login");
+  // }
+
+  async adminLogout(req, res) {
+
+    try {
+
+      const refreshToken = req.cookies.adminRefreshToken;
+
+      if (refreshToken) {
+
+        const admin = await Admin.findOne({ refreshToken });
+
+        if (admin) {
+          admin.refreshToken = null;
+          await admin.save();
+        }
+      }
+
+      res.clearCookie("adminAccessToken");
+
+      res.clearCookie("adminRefreshToken");
+
+      res.redirect("/admin/login");
+
+    } catch (error) {
+      
+      console.error("Logout Error:", error);
+
+      res.redirect("/admin/login");
+    }
   }
 }
 

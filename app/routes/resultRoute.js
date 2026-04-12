@@ -3,7 +3,7 @@ const router = express.Router();
 
 const resultController = require("../controllers/resultController");
 const adminAuth = require("../middleware/adminAuthCheck");
-const authCheck = require("../middleware/authCheck");
+const authCheck = require("../middleware/voterAuthCheck");
 
 // Admin declares result
 router.post("/declare-result", adminAuth, resultController.declareResult);

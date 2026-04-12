@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const voterController = require("../controllers/voterController");
-const authCheck = require("../middleware/authCheck");
+const voterAuthCheck = require("../middleware/voterAuthCheck");
 
 
 // PUBLIC ROUTES
@@ -15,7 +15,11 @@ router.post("/logout", voterController.voterLogout);
 
 // router.use(authCheck);
 
-router.post("/update-password",authCheck, voterController.voterUpdatePassword);
-router.post("/submit-vote", authCheck, voterController.voterSubmitVote);
+router.post(
+  "/update-password",
+  voterAuthCheck,
+  voterController.voterUpdatePassword,
+);
+router.post("/submit-vote", voterAuthCheck, voterController.voterSubmitVote);
 
 module.exports = router;

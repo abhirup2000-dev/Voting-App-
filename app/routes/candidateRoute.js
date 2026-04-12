@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
 const candidateController = require("../controllers/candidateController");
-const candidateAuth = require("../middleware/candidateAuth");
 
 
 // PUBLIC ROUTES

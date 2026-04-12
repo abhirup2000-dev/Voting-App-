@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 const VoterSchema = new Schema(
   {
-    
     name: {
       type: String,
       trim: true,
@@ -37,6 +36,11 @@ const VoterSchema = new Schema(
       minlength: 6,
     },
 
+    refreshToken: {
+      type: String,
+      default: null,
+    },
+
     isVoted: {
       type: Boolean,
       default: false,
@@ -45,7 +49,7 @@ const VoterSchema = new Schema(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
 const VoterModel = mongoose.model("voter", VoterSchema);

@@ -9,10 +9,12 @@ const {setFlash} = require("../utils/flash");
 const { voterRegisterSchema, voterLoginSchema, voterUpdatePasswordSchema } = require('../utils/voterJoiValidation')
 
 class VoterController {
+
   async voterRegister(req, res) {
     try {
 
-      const { error, value } = await voterRegisterSchema.validate(req.body)
+      const { error, value } = voterRegisterSchema.validate(req.body)
+
       if(error){
         console.log(error)
         return res.redirect("/voter/register");
@@ -55,13 +57,13 @@ class VoterController {
 
   async voterLogin(req, res) {
     try {
+      const { error, value } = voterLoginSchema.validate(req.body);
 
-      const { error, value } = await voterLoginSchema.validate(req.body)
-      if(error){
-        console.log(error)
+      if (error) {
+        console.log(error);
         return res.redirect("/voter/login");
       }
-      const { epicNumber, password } = value
+      const { epicNumber, password } = value;
 
       if (!epicNumber || !password) {
         setFlash(req, "error", "All fields required.");
@@ -75,19 +77,53 @@ class VoterController {
         return res.redirect("/voter/login");
       }
 
-      const token = jwt.sign({ id: voter._id }, process.env.JWT_SECRET_KEY, {
-        expiresIn: "1d",
-      });
+      // const token = jwt.sign({ id: voter._id }, process.env.JWT_SECRET_KEY, {
+      //   expiresIn: "1d",
+      // });
 
-      res.cookie("voterToken", token, {
+      // res.cookie("voterToken", token, {
+      //   httpOnly: true,
+      //   sameSite: "lax",
+      //   maxAge: 86400000,
+      // });
+
+      // 🔑 Access Token (short)
+      const accessToken = jwt.sign(
+        { id: voter._id, role: "voter" },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "15m" },
+      );
+
+      // 🔄 Refresh Token (long)
+      const refreshToken = jwt.sign(
+        { id: voter._id },
+        process.env.JWT_REFRESH_SECRET,
+        { expiresIn: "7d" },
+      );
+
+      // Save refresh token
+      voter.refreshToken = refreshToken;
+
+      await voter.save();
+
+      // 🍪 Cookies
+      res.cookie("voterAccessToken", accessToken, {
         httpOnly: true,
         sameSite: "lax",
-        maxAge: 86400000,
+        maxAge: 15 * 60 * 1000,
+      });
+
+      res.cookie("voterRefreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       return res.redirect("/voter/dashboard");
-    } catch (err) {
-      setFlash(req, "error", err.message);
+
+    } catch (error) {
+
+      setFlash(req, "error", error.message);
       return res.redirect("/voter/login");
     }
   }
@@ -102,6 +138,7 @@ class VoterController {
       }
 
       if (await Result.findOne({ isDeclared: true })) {
+
         setFlash(req, "error", "Voting closed.");
         return res.redirect("/voter/dashboard");
       }
@@ -130,7 +167,7 @@ class VoterController {
   async voterUpdatePassword(req, res) {
     try {
 
-      const { error, value } = await voterUpdatePasswordSchema.validate(req.body)
+      const { error, value } = voterUpdatePasswordSchema.validate(req.body)
       if(error){
         console.log(error)
         return res.redirect("/voter/dashboard");
@@ -163,9 +200,28 @@ class VoterController {
     }
   }
 
-  voterLogout(req, res) {
-    res.clearCookie("voterToken");
-    return res.redirect("/voter/login");
+  async voterLogout(req, res) {
+    try {
+
+      const refreshToken = req.cookies.voterRefreshToken;
+
+      if (refreshToken) {
+        const voter = await Voter.findOne({ refreshToken });
+        if (voter) {
+          voter.refreshToken = null;
+          await voter.save();
+        }
+      }
+
+      res.clearCookie("voterAccessToken");
+      res.clearCookie("voterRefreshToken");
+
+      res.redirect("/voter/login");
+
+    } catch (error) {
+      console.error(error);
+      res.redirect("/voter/login");
+    }
   }
 }
 

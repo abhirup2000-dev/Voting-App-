@@ -13,14 +13,14 @@ const AdminSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      lowercase: true, 
+      lowercase: true,
       trim: true
     },
 
-    phoneNumber: { 
-      type: String, 
+    phoneNumber: {
+      type: String,
       required: true,
-      unique: true, 
+      unique: true,
       trim: true
     },
 
@@ -33,6 +33,11 @@ const AdminSchema = new Schema(
       type: String,
       enum: ["admin", "voter", "candidate"],
       default: "admin"
+    },
+
+    refreshToken: {
+      type: String,
+      default: null,
     },
 
     isActive: {

@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-
 const Voter = require("../models/voter");
 const Admin = require("../models/admin");
 const Candidate = require("../models/candidate");
-const Vote = require("../models/voteModel");
 const Result = require("../models/resultModel");
+const candidateAuth = require("../middleware/candidateAuth");
+const adminAuthCheck = require("../middleware/adminAuthCheck");
+const voterAuthCheck = require("../middleware/voterAuthCheck");
+
 
 // Flash helper via session
 function flash(req, type, msg) {
@@ -19,58 +19,24 @@ function getFlash(req) {
   return f;
 }
 
-// Token helpers
-function decodeToken(token) {
-  try {
-    return jwt.verify(token, process.env.JWT_SECRET_KEY);
-  } catch {
-    return null;
-  }
-}
-function requireVoter(req, res, next) {
-  const d = decodeToken(req.cookies.voterToken);
-  if (!d) {
-    flash(req, "error", "Please login to continue.");
-    return res.redirect("/voter/login");
-  }
-  req.voter = d;
-  next();
-}
-function requireAdmin(req, res, next) {
-  const d = decodeToken(req.cookies.adminToken);
-  if (!d || d.role !== "admin") {
-    flash(req, "error", "Please login as admin.");
-    return res.redirect("/admin/login");
-  }
-  req.admin = d;
-  next();
-}
-function requireCandidate(req, res, next) {
-  const d = decodeToken(req.cookies.candidateToken);
-  if (!d || d.role !== "candidate") {
-    flash(req, "error", "Please login.");
-    return res.redirect("/candidate/login");
-  }
-  req.candidate = d;
-  next();
-}
-
-// HOME
-// router.get("/", (req, res) =>{
-//   res.clearCookie("voterToken")
-//   res.clearCookie("adminToken")
-//   res.clearCookie("candidateToken")
-//   res.render("index")});
 router.get("/", (req, res) => {
   const options = {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
   };
 
-  ["voterToken", "adminToken", "candidateToken"].forEach(token =>
-    res.clearCookie(token, options)
-  );
+  const cookiesToClear = [
+    "voterAccessToken",
+    "voterRefreshToken",
+    "adminAccessToken",
+    "adminRefreshToken",
+    "candidateAccessToken",
+    "candidateRefreshToken",
+  ];
+
+  cookiesToClear.forEach((token) => {
+    res.clearCookie(token, options);
+  });
 
   res.render("index");
 });
@@ -85,7 +51,7 @@ router.get("/voter/login", (req, res) =>
 );
 
 //VOTER DASHBOARD
-router.get("/voter/dashboard", requireVoter, async (req, res) => {
+router.get("/voter/dashboard", voterAuthCheck, async (req, res) => {
   try {
     const voter = await Voter.findById(req.voter.id);
     if (!voter) return res.redirect("/voter/login");
@@ -116,7 +82,7 @@ router.get("/admin/login", (req, res) =>
 );
 
 //ADMIN DASHBOARD
-router.get("/admin/dashboard", requireAdmin, async (req, res) => {
+router.get("/admin/dashboard", adminAuthCheck, async (req, res) => {
   try {
     const admin = await Admin.findById(req.admin.id).select("-password");
     const candidates = await Candidate.find().select("name party phone");
@@ -138,7 +104,7 @@ router.get("/admin/dashboard", requireAdmin, async (req, res) => {
 });
 
 //ADMIN PROFILE
-router.get("/admin/profile", requireAdmin, async (req, res) => {
+router.get("/admin/profile", adminAuthCheck, async (req, res) => {
   try {
     const admin = await Admin.findById(req.admin.id).select("-password");
     res.render("admin/profile", { flash: getFlash(req), admin });
@@ -155,7 +121,7 @@ router.get("/candidate/login", (req, res) =>
 );
 
 //CANDIDATE DASHBOARD
-router.get("/candidate/dashboard", requireCandidate, async (req, res) => {
+router.get("/candidate/dashboard", candidateAuth, async (req, res) => {
   try {
     const result = await Result.findOne({ isDeclared: true });
     res.render("candidate/dashboard", {
@@ -179,8 +145,5 @@ router.get("/result", async (req, res) => {
     res.render("result", { result: null });
   }
 });
-
-
-
 
 module.exports = router;
