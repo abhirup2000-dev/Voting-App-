@@ -71,8 +71,6 @@ router.get("/voter/dashboard", voterAuthCheck, async (req, res) => {
   }
 });
 
-
-
 //ADMIN SIGNUP
 router.get("/admin/signup", (req, res) =>
   res.render("admin/signup", { flash: getFlash(req) }),
