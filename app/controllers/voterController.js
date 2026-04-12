@@ -6,11 +6,19 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {setFlash} = require("../utils/flash");
 
+const { voterRegisterSchema, voterLoginSchema, voterUpdatePasswordSchema } = require('../utils/voterJoiValidation')
 
 class VoterController {
   async voterRegister(req, res) {
     try {
-      const { name, phone, epicNumber, constituency, password } = req.body;
+
+      const { error, value } = await voterRegisterSchema.validate(req.body)
+      if(error){
+        console.log(error)
+        return res.redirect("/voter/register");
+      }
+
+      const { name, phone, epicNumber, constituency, password } = value
 
       if (!name || !phone || !epicNumber || !constituency || !password) {
         setFlash(req, "error", "All fields are required.");
@@ -47,7 +55,13 @@ class VoterController {
 
   async voterLogin(req, res) {
     try {
-      const { epicNumber, password } = req.body;
+
+      const { error, value } = await voterLoginSchema.validate(req.body)
+      if(error){
+        console.log(error)
+        return res.redirect("/voter/login");
+      }
+      const { epicNumber, password } = value
 
       if (!epicNumber || !password) {
         setFlash(req, "error", "All fields required.");
@@ -115,7 +129,14 @@ class VoterController {
 
   async voterUpdatePassword(req, res) {
     try {
-      const { oldPassword, newPassword } = req.body;
+
+      const { error, value } = await voterUpdatePasswordSchema.validate(req.body)
+      if(error){
+        console.log(error)
+        return res.redirect("/voter/dashboard");
+      }
+
+      const { oldPassword, newPassword } = value
 
       if (!oldPassword || !newPassword || newPassword.length < 6) {
         setFlash(req, "error", "Invalid password.");

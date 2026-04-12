@@ -56,12 +56,13 @@ class ResultController {
         results
       });
 
-      return res.status(StatusCode.SUCCESS).json({
-        success: true,
-        message: "Result declared successfully",
-        winner,
-        results
-      });
+      return res.redirect("/admin/dashboard");
+      // return res.status(StatusCode.SUCCESS).json({
+      //   success: true,
+      //   message: "Result declared successfully",
+      //   winner,
+      //   results
+      // });
 
     } catch (error) {
       return res.status(StatusCode.SERVER_ERROR).json({
@@ -71,9 +72,9 @@ class ResultController {
     }
   }
 
-  // ===========================
+
   // VIEW RESULT (ALL)
-  // ===========================
+
   async getResult(req, res) {
     try {
       const result = await Result.findOne({ isDeclared: true });

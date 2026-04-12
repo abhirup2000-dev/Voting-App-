@@ -5,9 +5,21 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { setFlash } = require("../utils/flash");
 
+const {
+  adminSignupSchema,
+  adminLoginSchema,
+  updateProfileSchema,
+  updatePasswordSchema,
+  createCandidateSchema,
+} = require("../utils/adminJoiValidation");
 class AdminController {
   async adminSignup(req, res) {
-    const { name, email, phoneNumber, password } = req.body;
+    const { error, value } = await adminSignupSchema.validate(req.body);
+    if (error) {
+      console.log(error);
+      return res.redirect("/admin/signup");
+    }
+    const { name, email, phoneNumber, password } = value;
 
     if (!name || !email || !phoneNumber || !password) {
       setFlash(req, "error", "All fields required.");
@@ -43,7 +55,12 @@ class AdminController {
   }
 
   async adminLogin(req, res) {
-    const { email, password } = req.body;
+    const { error, value } = await adminLoginSchema.validate(req.body);
+    if (error) {
+      console.log(error);
+      return res.redirect("/admin/login");
+    }
+    const { email, password } = value;
 
     if (!email || !password) {
       setFlash(req, "error", "All fields required.");
@@ -104,8 +121,44 @@ class AdminController {
     }
   }
 
+  async updateProfile(req, res) {
+    const { error, value } = await updateProfileSchema.validate(req.body);
+    if (error) {
+      console.log(error);
+      return res.redirect("/admin/profile");
+    }
+
+    const { name, phoneNumber } = value;
+
+    try {
+      const admin = await Admin.findById(req.admin.id);
+
+      if (!admin) {
+        setFlash(req, "error", "Admin not found.");
+        return res.redirect("/admin/profile");
+      }
+
+      admin.name = name || admin.name;
+      admin.phoneNumber = phoneNumber || admin.phoneNumber;
+
+      await admin.save();
+
+      setFlash(req, "success", "Profile updated.");
+      res.redirect("/admin/profile");
+    } catch (err) {
+      console.error(err);
+      setFlash(req, "error", "Something went wrong.");
+      res.redirect("/admin/profile");
+    }
+  }
+
   async updateAdminPassword(req, res) {
-    const { oldPassword, newPassword } = req.body;
+    const { error, value } = await updatePasswordSchema.validate(req.body);
+    if (error) {
+      console.log(error);
+      return res.redirect("/admin/profile");
+    }
+    const { oldPassword, newPassword } = value;
 
     if (!oldPassword || !newPassword || newPassword.length < 6) {
       setFlash(req, "error", "Invalid password.");

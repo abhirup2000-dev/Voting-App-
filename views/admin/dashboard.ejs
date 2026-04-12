@@ -132,7 +132,7 @@
         </div>
       <% } else { %>
         <p class="text-muted small mb-3">This will tally all votes and close voting permanently.</p>
-        <form method="POST" action="/admin/declare-result"
+        <form method="POST" action="/result/declare-result"
               onsubmit="return confirm('Declare the result now? Voting will be permanently closed.')">
           <button type="submit" class="btn btn-warning fw-semibold">Declare Result</button>
         </form>

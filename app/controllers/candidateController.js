@@ -9,7 +9,7 @@ class CandidateController {
   ///candidate controller func
   //CANDIDATE LOGIN
   async candidateLogin(req, res) {
-    const { error, value } = candidateLoginSchema.validate(req.body);
+    const { error, value } = await candidateLoginSchema.validate(req.body);
 
       if (error) {
         setFlash(req, "error", error.details[0].message);

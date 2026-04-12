@@ -12,7 +12,7 @@ router.post("/logout", adminController.adminLogout);
 
 // PROTECTED ROUTES
 
-router.post("/update-profile", adminAuthCheck, adminController.updateAdminPassword);
+router.post("/update-profile", adminAuthCheck, adminController.updateProfile);
 
 router.post("/update-password", adminAuthCheck, adminController.updateAdminPassword);
 

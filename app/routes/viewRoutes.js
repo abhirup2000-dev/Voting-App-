@@ -60,16 +60,16 @@ router.get("/", (req, res) =>{
   res.clearCookie("voterToken")
   res.render("index")});
 
-// ── VOTER REGISTER ──
+//VOTER REGISTER
 router.get("/voter/register", (req, res) =>
   res.render("voter/register", { flash: getFlash(req) }),
 );
-// ── VOTER LOGIN ──
+//VOTER LOGIN
 router.get("/voter/login", (req, res) =>
   res.render("voter/login", { flash: getFlash(req) }),
 );
 
-// ── VOTER DASHBOARD ──
+//VOTER DASHBOARD
 router.get("/voter/dashboard", requireVoter, async (req, res) => {
   try {
     const voter = await Voter.findById(req.voter.id);
@@ -90,17 +90,17 @@ router.get("/voter/dashboard", requireVoter, async (req, res) => {
 
 
 
-// ── ADMIN SIGNUP ──
+//ADMIN SIGNUP
 router.get("/admin/signup", (req, res) =>
   res.render("admin/signup", { flash: getFlash(req) }),
 );
 
-// ── ADMIN LOGIN ──
+//ADMIN LOGIN
 router.get("/admin/login", (req, res) =>
   res.render("admin/login", { flash: getFlash(req) }),
 );
 
-// ── ADMIN DASHBOARD ──
+//ADMIN DASHBOARD
 router.get("/admin/dashboard", requireAdmin, async (req, res) => {
   try {
     const admin = await Admin.findById(req.admin.id).select("-password");
@@ -122,7 +122,7 @@ router.get("/admin/dashboard", requireAdmin, async (req, res) => {
   }
 });
 
-// ── ADMIN PROFILE ──
+//ADMIN PROFILE
 router.get("/admin/profile", requireAdmin, async (req, res) => {
   try {
     const admin = await Admin.findById(req.admin.id).select("-password");
@@ -134,12 +134,12 @@ router.get("/admin/profile", requireAdmin, async (req, res) => {
 });
 
 
-// ── CANDIDATE LOGIN ──
+//CANDIDATE LOGIN
 router.get("/candidate/login", (req, res) =>
   res.render("candidate/login", { flash: getFlash(req) }),
 );
 
-// ── CANDIDATE DASHBOARD ──
+//CANDIDATE DASHBOARD
 router.get("/candidate/dashboard", requireCandidate, async (req, res) => {
   try {
     const result = await Result.findOne({ isDeclared: true });
@@ -155,7 +155,7 @@ router.get("/candidate/dashboard", requireCandidate, async (req, res) => {
 });
 
 
-// ── PUBLIC RESULT ──
+//PUBLIC RESULT
 router.get("/result", async (req, res) => {
   try {
     const result = await Result.findOne({ isDeclared: true });
