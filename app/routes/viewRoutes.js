@@ -56,9 +56,24 @@ function requireCandidate(req, res, next) {
 }
 
 // HOME
-router.get("/", (req, res) =>{
-  res.clearCookie("voterToken")
-  res.render("index")});
+// router.get("/", (req, res) =>{
+//   res.clearCookie("voterToken")
+//   res.clearCookie("adminToken")
+//   res.clearCookie("candidateToken")
+//   res.render("index")});
+router.get("/", (req, res) => {
+  const options = {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  };
+
+  ["voterToken", "adminToken", "candidateToken"].forEach(token =>
+    res.clearCookie(token, options)
+  );
+
+  res.render("index");
+});
 
 //VOTER REGISTER
 router.get("/voter/register", (req, res) =>
