@@ -1,7 +1,11 @@
 const Candidate = require("../models/candidate");
+
+const { setFlash } = require("../utils/flash");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { candidateLoginSchema } = require("../utils/candidateJoiValidation");
+
 
 class CandidateController {
   ///candidate controller func
@@ -36,14 +40,14 @@ class CandidateController {
       //   maxAge: 86400000,
       // });
 
-      // 🔑 Access Token
+      //Access Token
       const accessToken = jwt.sign(
         { id: candidate._id, name: candidate.name, role: "candidate" },
         process.env.JWT_SECRET_KEY,
-        { expiresIn: "15m" },
+        { expiresIn: "1m" },
       );
 
-      // 🔄 Refresh Token
+      //Refresh Token
       const refreshToken = jwt.sign(
         { id: candidate._id },
         process.env.JWT_REFRESH_SECRET,
@@ -55,11 +59,11 @@ class CandidateController {
 
       await candidate.save();
 
-      // 🍪 Cookies
+      //Cookies
       res.cookie("candidateAccessToken", accessToken, {
         httpOnly: true,
         sameSite: "lax",
-        maxAge: 15 * 60 * 1000,
+        maxAge: 1 * 60 * 1000,
       });
 
       res.cookie("candidateRefreshToken", refreshToken, {

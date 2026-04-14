@@ -14,7 +14,7 @@ const voterAuthCheck = async (req, res, next) => {
       return res.redirect("/voter/login");
     }
 
-    // ✅ Try access token
+    //Try access token
     if (accessToken) {
       try {
         const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
@@ -28,7 +28,7 @@ const voterAuthCheck = async (req, res, next) => {
       }
     }
 
-    // 🔄 Refresh flow
+    //Refresh flow
     if (!refreshToken) {
 
       return res.redirect("/voter/login");
@@ -51,17 +51,17 @@ const voterAuthCheck = async (req, res, next) => {
       return res.redirect("/voter/login");
     }
 
-    // 🔁 New access token
+    //New access token
     const newAccessToken = jwt.sign(
       { id: voter._id, role: "voter" },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "1m" },
     );
 
     res.cookie("voterAccessToken", newAccessToken, {
       httpOnly: true,
       sameSite: "lax",
-      maxAge: 15 * 60 * 1000,
+      maxAge: 1 * 60 * 1000,
     });
 
     req.voter = { id: voter._id, role: "voter" };

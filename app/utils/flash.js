@@ -1,18 +1,12 @@
+const setFlash = (req, type, msg) => {
+  if (!req.session.flash) req.session.flash = [];
+  req.session.flash.push({ type, msg });
+};
+
 const flashMiddleware = (req, res, next) => {
-  res.locals.flash = req.session?.flash || null;
-
-  if (req.session) {
-    delete req.session.flash;
-  }
-
+  res.locals.flash = req.session.flash || [];
+  req.session.flash = []; // clear after use
   next();
 };
 
-const setFlash = (req, type, message) => {
-  if (!req.session) return;
-
-  req.session.flash = { type, message };
-};
-
-
-module.exports = {flashMiddleware,setFlash};
+module.exports = { setFlash, flashMiddleware };

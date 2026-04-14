@@ -90,7 +90,7 @@ class VoterController {
       const accessToken = jwt.sign(
         { id: voter._id, role: "voter" },
         process.env.JWT_SECRET_KEY,
-        { expiresIn: "15m" },
+        { expiresIn: "1m" },
       );
 
       // 🔄 Refresh Token (long)
@@ -109,7 +109,7 @@ class VoterController {
       res.cookie("voterAccessToken", accessToken, {
         httpOnly: true,
         sameSite: "lax",
-        maxAge: 15 * 60 * 1000,
+        maxAge: 1 * 60 * 1000,
       });
 
       res.cookie("voterRefreshToken", refreshToken, {

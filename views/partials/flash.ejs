@@ -1,6 +1,15 @@
-<% if (flash && flash.msg) { %>
-  <div class="alert alert-<%= flash.type === 'success' ? 'success' : 'danger' %> alert-dismissible py-2 mb-3">
-    <%= flash.msg %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  </div>
+<% if (flash && flash.length) { %>
+  <% flash.forEach(f => { %>
+    <div class="custom-alert alert-<%= f.type === 'success' ? 'success' : 'danger' %> d-flex align-items-center justify-content-between fade-in mb-3">
+      
+      <div class="d-flex align-items-center gap-2">
+        <span class="alert-icon">
+          <%= f.type === 'success' ? '✅' : '⚠️' %>
+        </span>
+        <span class="fw-medium"><%= f.msg %></span>
+      </div>
+
+      <button type="button" class="btn-close ms-3" data-bs-dismiss="alert"></button>
+    </div>
+  <% }) %>
 <% } %>

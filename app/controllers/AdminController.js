@@ -92,7 +92,7 @@ class AdminController {
       const accessToken = jwt.sign(
         { id: admin._id, role: "admin" },
         process.env.JWT_SECRET_KEY,
-        { expiresIn: "15m" },
+        { expiresIn: "1m" },
       );
 
       const refreshToken = jwt.sign(
@@ -108,7 +108,7 @@ class AdminController {
       res.cookie("adminAccessToken", accessToken, {
         httpOnly: true,
         sameSite: "lax",
-        maxAge: 15 * 60 * 1000,
+        maxAge: 1 * 60 * 1000,
       });
 
       res.cookie("adminRefreshToken", refreshToken, {
@@ -126,7 +126,13 @@ class AdminController {
   }
 
   async createCandidate(req, res) {
-    const { name, party, phone, password } = req.body;
+    const { error, value } = await createCandidateSchema.validate(req.body)
+    if (error) {
+      console.log(error);
+      return res.redirect("/admin/dashboard");
+    }
+
+    const { name, party, phone, password } = value
 
     if (!name || !party || !phone || !password) {
       setFlash(req, "error", "All fields required.");
@@ -202,7 +208,7 @@ class AdminController {
       const admin = await Admin.findById(req.admin.id);
 
       if (!(await bcrypt.compare(oldPassword, admin.password))) {
-        setFlash(req, "error", "Wrong password.");
+        setFlash(req, "error", "Something Wrong old password not matched.");
         return res.redirect("/admin/profile");
       }
 

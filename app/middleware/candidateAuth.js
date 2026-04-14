@@ -13,7 +13,7 @@ const candidateAuth = async (req, res, next) => {
       return res.redirect("/candidate/login");
     }
 
-    // ✅ Verify access token
+    //Verify access token
     if (accessToken) {
       try {
         const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
@@ -27,7 +27,7 @@ const candidateAuth = async (req, res, next) => {
       }
     }
 
-    // 🔄 Refresh flow
+    //Refresh flow
     if (!refreshToken) {
       return res.redirect("/candidate/login");
     }
@@ -48,17 +48,17 @@ const candidateAuth = async (req, res, next) => {
       return res.redirect("/candidate/login");
     }
 
-    // 🔁 Generate new access token
+    //Generate new access token
     const newAccessToken = jwt.sign(
       { id: candidate._id, role: "candidate" },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: "15m" },
+      { expiresIn: "1m" },
     );
 
     res.cookie("candidateAccessToken", newAccessToken, {
       httpOnly: true,
       sameSite: "lax",
-      maxAge: 15 * 60 * 1000,
+      maxAge: 1 * 60 * 1000,
     });
 
     req.candidate = { id: candidate._id, role: "candidate" };
