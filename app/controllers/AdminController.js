@@ -78,7 +78,7 @@ class AdminController {
           <td style="background:linear-gradient(135deg,#4e73df,#224abe); padding:25px; text-align:center; color:#ffffff;">
             <h2 style="margin:0; font-size:22px;">Welcome 🎉</h2>
             <p style="margin:5px 0 0; font-size:14px;">
-              Employee Management System
+              VoteHub system
             </p>
           </td>
         </tr>
