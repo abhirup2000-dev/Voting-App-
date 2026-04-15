@@ -15,7 +15,7 @@ class CandidateController {
     const { error, value } = candidateLoginSchema.validate(req.body);
 
       if (error) {
-        setFlash(req, "error", error.details[0].message);
+        setFlash(req, "error", error.message);
         return res.redirect("/candidate/login");
       }
 
@@ -77,7 +77,7 @@ class CandidateController {
     } catch (error) {
 
       //flash(req, "error", error.message);
-      setFlash(req, "error", error.details[0].message);
+      setFlash(req, "error", error.message);
 
       res.redirect("/candidate/login");
     }
