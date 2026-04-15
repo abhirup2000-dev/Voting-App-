@@ -76,7 +76,8 @@ class CandidateController {
 
     } catch (error) {
 
-      flash(req, "error", error.message);
+      //flash(req, "error", error.message);
+      setFlash(req, "error", error.details[0].message);
 
       res.redirect("/candidate/login");
     }
