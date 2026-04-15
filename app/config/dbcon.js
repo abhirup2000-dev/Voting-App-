@@ -15,10 +15,10 @@ const DatabaseConnect = async () => {
 
     if (connect) {
 
-      console.log("🚀 MongoDB CONNECTED SUCCESSFULLY!!");
+      console.log("🚀 MongoDB CONNECTED SUCCESSFULLY !!!");
 
     } else {
-      console.log("Database not connected");
+      console.log("Database is not connected");
     }
 
   } catch (err) {
