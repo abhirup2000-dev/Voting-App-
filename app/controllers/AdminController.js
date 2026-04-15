@@ -72,7 +72,7 @@ class AdminController {
         <td align="center">
         <!-- Main Container -->
         <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:10px; overflow:hidden;">
-        
+
         <!-- Header -->
         <tr>
           <td style="background:linear-gradient(135deg,#4e73df,#224abe); padding:25px; text-align:center; color:#ffffff;">
@@ -116,7 +116,7 @@ class AdminController {
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
               <td align="center" style="padding:20px 0;">
-                <a href="${loginUrl}" 
+                <a href="${loginUrl}"
                    style="background:#4e73df; color:#ffffff; text-decoration:none; padding:12px 24px; border-radius:6px; font-size:14px; font-weight:bold; display:inline-block;">
                   Login Now
                 </a>
@@ -149,7 +149,7 @@ class AdminController {
   </html>`,
       });
 
-      setFlash(req, "success", "Signup successful.");
+      setFlash(req, "success", "Signup successful. Please Check Your Mail");
 
       res.redirect("/admin/login");
     } catch (error) {
