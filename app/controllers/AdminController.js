@@ -140,14 +140,13 @@ class AdminController {
 
     </table>
 
-  </td>
-</tr>
+     </td>
+   </tr>
 
   </table>
 
-</body>
-</html>
-`,
+   </body>
+  </html>`,
       });
 
       setFlash(req, "success", "Signup successful.");
