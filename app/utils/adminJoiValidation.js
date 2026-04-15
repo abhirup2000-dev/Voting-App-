@@ -4,7 +4,7 @@ const adminSignupSchema = Joi.object({
   name: Joi.string().trim().required(),
   email: Joi.string().email().trim().required(),
   phoneNumber: Joi.string().trim().required(),
-  password: Joi.string().min(6).required(),
+  // password: Joi.string().min(6).required(),
 });
 
 const adminLoginSchema = Joi.object({

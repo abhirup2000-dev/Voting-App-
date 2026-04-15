@@ -2,6 +2,10 @@ const Admin = require("../models/admin");
 const Candidate = require("../models/candidate");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const transporter = require("../config/emailconfig");
+
+const genPassword = require("../utils/passwordGenerator");
+
 const { setFlash } = require("../utils/flash");
 
 const {
@@ -19,9 +23,9 @@ class AdminController {
       console.log(error);
       return res.redirect("/admin/signup");
     }
-    const { name, email, phoneNumber, password } = value;
+    const { name, email, phoneNumber } = value;
 
-    if (!name || !email || !phoneNumber || !password) {
+    if (!name || !email || !phoneNumber) {
       setFlash(req, "error", "All fields required.");
       return res.redirect("/admin/signup");
     }
@@ -36,6 +40,9 @@ class AdminController {
         return res.redirect("/admin/signup");
       }
 
+      // Generate password
+      const password = genPassword;
+
       const hashed = await bcrypt.hash(password, 10);
 
       await Admin.create({
@@ -44,6 +51,103 @@ class AdminController {
         phoneNumber,
         password: hashed,
         role: "admin",
+      });
+
+      //login url
+      const baseUrl = req.protocol + "://" + req.get("host");
+      const loginUrl = baseUrl + "/admin/login";
+
+      //sending credentials to mail id
+      await transporter.sendMail({
+        from: process.env.EMAIL_FROM,
+        to: email,
+        subject: "Your Login Credentials",
+        html: `
+        <!DOCTYPE html>
+        <html>
+        <body style="margin:0; padding:0; background-color:#f4f6f9; font-family: Arial, sans-serif;">
+        <!-- Outer Wrapper (VERY IMPORTANT) -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6f9; padding:20px 0;">
+        <tr>
+        <td align="center">
+        <!-- Main Container -->
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:10px; overflow:hidden;">
+        
+        <!-- Header -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#4e73df,#224abe); padding:25px; text-align:center; color:#ffffff;">
+            <h2 style="margin:0; font-size:22px;">Welcome 🎉</h2>
+            <p style="margin:5px 0 0; font-size:14px;">
+              Employee Management System
+            </p>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:30px; color:#333333;">
+
+            <p style="font-size:15px; margin:0 0 10px;">Hi,</p>
+
+            <p style="font-size:14px; color:#555; line-height:1.6; margin:0 0 20px;">
+              Your account has been successfully created. You can now log in using the credentials below:
+            </p>
+
+          <!-- Credentials -->
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fc; border:1px solid #e3e6f0; border-radius:8px;">
+            <tr>
+              <td style="padding:12px; font-size:14px;">
+                <strong>Email:</strong> ${email}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:12px; font-size:14px;">
+                <strong>Password:</strong> ${password}
+              </td>
+            </tr>
+          </table>
+
+          <!-- Warning -->
+          <p style="font-size:13px; color:#e74a3b; margin:20px 0;">
+            ⚠️ For security reasons, please change your password immediately after your first login.
+          </p>
+
+          <!-- Button -->
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td align="center" style="padding:20px 0;">
+                <a href="${loginUrl}" 
+                   style="background:#4e73df; color:#ffffff; text-decoration:none; padding:12px 24px; border-radius:6px; font-size:14px; font-weight:bold; display:inline-block;">
+                  Login Now
+                </a>
+              </td>
+            </tr>
+          </table>
+
+          <p style="font-size:13px; color:#777;">
+            If you did not request this account, please contact your administrator.
+          </p>
+
+        </td>
+      </tr>
+
+      <!-- Footer -->
+      <tr>
+        <td style="background:#f1f3f7; text-align:center; padding:15px; font-size:12px; color:#888;">
+          © 2026 Employee Management System. All rights reserved.
+        </td>
+      </tr>
+
+    </table>
+
+  </td>
+</tr>
+
+  </table>
+
+</body>
+</html>
+`,
       });
 
       setFlash(req, "success", "Signup successful.");
@@ -126,13 +230,13 @@ class AdminController {
   }
 
   async createCandidate(req, res) {
-    const { error, value } = await createCandidateSchema.validate(req.body)
+    const { error, value } = await createCandidateSchema.validate(req.body);
     if (error) {
       console.log(error);
       return res.redirect("/admin/dashboard");
     }
 
-    const { name, party, phone, password } = value
+    const { name, party, phone, password } = value;
 
     if (!name || !party || !phone || !password) {
       setFlash(req, "error", "All fields required.");
@@ -229,13 +333,10 @@ class AdminController {
   // }
 
   async adminLogout(req, res) {
-
     try {
-
       const refreshToken = req.cookies.adminRefreshToken;
 
       if (refreshToken) {
-
         const admin = await Admin.findOne({ refreshToken });
 
         if (admin) {
@@ -249,9 +350,7 @@ class AdminController {
       res.clearCookie("adminRefreshToken");
 
       res.redirect("/admin/login");
-
     } catch (error) {
-
       console.error("Logout Error:", error);
 
       res.redirect("/admin/login");

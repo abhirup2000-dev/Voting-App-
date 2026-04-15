@@ -26,7 +26,7 @@ const AdminSchema = new Schema(
 
     password: {
       type: String,
-      required: true
+      default: '1234@admin'
     },
 
     role: {
