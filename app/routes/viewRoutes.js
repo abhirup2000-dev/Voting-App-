@@ -6,7 +6,7 @@ const Voter = require("../models/voter");
 const Admin = require("../models/admin");
 const Candidate = require("../models/candidate");
 const Result = require("../models/resultModel");
-
+const Vote = require("../models/voteModel");
 const candidateAuth = require("../middleware/candidateAuth");
 const adminAuthCheck = require("../middleware/adminAuthCheck");
 const voterAuthCheck = require("../middleware/voterAuthCheck");
@@ -94,12 +94,59 @@ router.get("/admin/dashboard", adminAuthCheck, async (req, res) => {
       "name epicNumber constituency",
     );
 
+    // LOOKUP LOGIC
+    const results = await Vote.aggregate([
+      {
+        $lookup: {
+          from: "voters", // collection name (IMPORTANT: plural + lowercase)
+          localField: "voterId",
+          foreignField: "_id",
+          as: "voter",
+        },
+      },
+      { $unwind: "$voter" },
+
+      // 🔗 Join candidate details
+      {
+        $lookup: {
+          from: "candidates",
+          localField: "candidateId",
+          foreignField: "_id",
+          as: "candidate",
+        },
+      },
+      { $unwind: "$candidate" },
+
+      // Only voters who actually voted (extra safety)
+      {
+        $match: {
+          "voter.isVoted": true,
+        },
+      },
+
+      // 🎯 Final fields
+      {
+        $project: {
+          _id: 0,
+          name: "$voter.name",
+          epicNumber: "$voter.epicNumber",
+          constituency: "$voter.constituency",
+          candidateName: "$candidate.name", // 👈 required field
+          partyName: "$candidate.party", // 👈 required field
+        },
+      },
+      // (optional) sort by latest vote
+      {
+        $sort: { createdAt: -1 },
+      },
+    ]);
+
     const result = await Result.findOne({ isDeclared: true });
 
     res.render("admin/dashboard", {
       admin,
       candidates,
-      voters,
+      voters: results,
       result,
     });
   } catch (err) {

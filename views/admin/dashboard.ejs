@@ -103,7 +103,16 @@
       <% } else { %>
         <div class="table-responsive">
           <table class="table table-hover mb-0">
-            <thead><tr><th>#</th><th>Name</th><th>EPIC Number</th><th>Constituency</th></tr></thead>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Voter Name</th>
+                <th>EPIC Number</th>
+                <th>Constituency</th>
+                <th>Candidate Name</th>
+                <th>Party</th>
+              </tr>
+            </thead>
             <tbody>
               <% voters.forEach(function(v, i) { %>
                 <tr>
@@ -111,6 +120,8 @@
                   <td class="fw-semibold"><%= v.name %></td>
                   <td><code><%= v.epicNumber %></code></td>
                   <td class="text-muted"><%= v.constituency %></td>
+                  <td class="text-muted"><%= v.candidateName %></td>
+                  <td class="text-muted"><%= v.partyName %></td>
                 </tr>
               <% }) %>
             </tbody>
