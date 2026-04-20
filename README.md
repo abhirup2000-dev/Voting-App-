@@ -1,3 +1,5 @@
+VoteHub- Voting Application
+
 1. Project Architecture
 The application follows a standard MVC (Model-View-Controller) pattern. Node.js and Express handle the logic, MongoDB stores the data, and Bootstrap provides a responsive interface for the frontend.
 
